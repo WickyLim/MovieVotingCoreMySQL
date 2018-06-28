@@ -1,0 +1,27 @@
+﻿<Properties StartupConfiguration="{24D8C7FB-6C9D-4FC1-8B9B-43019E098C9F}|Default">
+  <MonoDevelop.Ide.Workbench ActiveDocument="README.md">
+    <Files>
+      <File FileName="MovieVotingCoreMySQL.csproj" Line="1" Column="1" />
+      <File FileName="appsettings.json" Line="9" Column="40" />
+      <File FileName="Models/MovieContext.cs" Line="1" Column="1" />
+      <File FileName="Models/Movie.cs" Line="1" Column="1" />
+      <File FileName="Startup.cs" Line="32" Column="23" />
+      <File FileName="Program.cs" Line="30" Column="41" />
+      <File FileName="Pages/Index.cshtml" Line="1" Column="1" />
+      <File FileName="Pages/Index.cshtml.cs" Line="10" Column="28" />
+      <File FileName="Pages/About.cshtml.cs" Line="10" Column="28" />
+      <File FileName="Models/SeedData.cs" Line="24" Column="38" />
+      <File FileName="Dockerfile" Line="16" Column="50" />
+      <File FileName="docker-compose.yml" Line="8" Column="29" />
+      <File FileName="README.md" Line="1" Column="65" />
+    </Files>
+  </MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
+  <MonoDevelop.Ide.DebuggingService.Breakpoints>
+    <BreakpointStore />
+  </MonoDevelop.Ide.DebuggingService.Breakpoints>
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+  <MonoDevelop.Ide.ItemProperties.docker-compose PreferredExecutionTarget="MonoDevelop.Default" />
+  <MultiItemStartupConfigurations />
+  <MonoDevelop.Ide.ItemProperties.MovieVotingCoreMySQL PreferredExecutionTarget="MonoDevelop.Default" />
+</Properties>

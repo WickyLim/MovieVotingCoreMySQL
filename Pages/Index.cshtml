@@ -1,0 +1,21 @@
+﻿@page
+@model IndexModel
+@{
+    ViewData["Title"] = "Home page";
+}
+
+<div class="jumbotron">
+    <h2 style="text-align: center">Vote for Movie of the Year 2018</h2>
+</div>
+<div class="row">
+    @foreach (var item in Model.Movie) {
+        <div class="col-md-4" style="text-align: center">
+            <p>No. of votes: @(item.Votes)</p>
+            <img src="~/images/@(item.ImagePath).jpg" alt="ASP.NET" class="img-responsive" />
+            <h2>@(item.MovieName)</h2>
+            <p>
+                <a class="btn btn-default" asp-page="About" asp-route-id="@(item.MovieID)">Vote</a>
+            </p>
+        </div>
+    }
+</div>

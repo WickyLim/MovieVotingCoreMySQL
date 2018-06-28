@@ -1,0 +1,11 @@
+/Users/wickylim/Desktop/CodesStuff/VSWorkspace/MovieVotingCoreMySQL/bin/Debug/netcoreapp2.0/MovieVotingCoreMySQL.deps.json
+/Users/wickylim/Desktop/CodesStuff/VSWorkspace/MovieVotingCoreMySQL/bin/Debug/netcoreapp2.0/MovieVotingCoreMySQL.runtimeconfig.json
+/Users/wickylim/Desktop/CodesStuff/VSWorkspace/MovieVotingCoreMySQL/bin/Debug/netcoreapp2.0/MovieVotingCoreMySQL.runtimeconfig.dev.json
+/Users/wickylim/Desktop/CodesStuff/VSWorkspace/MovieVotingCoreMySQL/bin/Debug/netcoreapp2.0/MovieVotingCoreMySQL.dll
+/Users/wickylim/Desktop/CodesStuff/VSWorkspace/MovieVotingCoreMySQL/bin/Debug/netcoreapp2.0/MovieVotingCoreMySQL.pdb
+/Users/wickylim/Desktop/CodesStuff/VSWorkspace/MovieVotingCoreMySQL/obj/Debug/netcoreapp2.0/MovieVotingCoreMySQL.csprojResolveAssemblyReference.cache
+/Users/wickylim/Desktop/CodesStuff/VSWorkspace/MovieVotingCoreMySQL/obj/Debug/netcoreapp2.0/MovieVotingCoreMySQL.csproj.CoreCompileInputs.cache
+/Users/wickylim/Desktop/CodesStuff/VSWorkspace/MovieVotingCoreMySQL/obj/Debug/netcoreapp2.0/MovieVotingCoreMySQL.AssemblyInfoInputs.cache
+/Users/wickylim/Desktop/CodesStuff/VSWorkspace/MovieVotingCoreMySQL/obj/Debug/netcoreapp2.0/MovieVotingCoreMySQL.AssemblyInfo.cs
+/Users/wickylim/Desktop/CodesStuff/VSWorkspace/MovieVotingCoreMySQL/obj/Debug/netcoreapp2.0/MovieVotingCoreMySQL.dll
+/Users/wickylim/Desktop/CodesStuff/VSWorkspace/MovieVotingCoreMySQL/obj/Debug/netcoreapp2.0/MovieVotingCoreMySQL.pdb
