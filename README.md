@@ -110,6 +110,7 @@ COPY --from=build-env /app/out .
 ENTRYPOINT ["dotnet", "MovieVotingCoreMySQL.dll"]
 ```
 (replace `MovieVotingCoreMySQL` to your own project name)
+
 3. In `appsettings.json` file of your project, change your default connection string
 ```shell
 ConnectionStrings": {
@@ -117,17 +118,21 @@ ConnectionStrings": {
 }
 ```
 Note: `mysql1` needs to be the same as you mysql image name set on Step 2 of [Setup MySQL on Docker](#setup-mysql-on-docker)
+
 4. On command prompt, navigate to project's directory
 5. On command prompt, run 
 ```shell
 docker build -t image-name .
 ``` 
 (replace `image-name` to your own preferred name)
+
 6. On command prompt, run 
 ```shell
 docker run -d -p 8080:80 --name container-name --link mysql1 -it image-name
 ``` 
 (replace `container-name` and `image-name` to your own preferred name)
+Note: `mysql1` needs to be the same as you mysql image name set on Step 2 of [Setup MySQL on Docker](#setup-mysql-on-docker)
+
 7. Visit http://localhost:8080
 
 
