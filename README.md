@@ -141,8 +141,8 @@ volumes:
   db-data:
 ```
 Here,
-    - `movievotingcoremysql` must be your image's name.
-    - `./dbbackup.sql:/docker-entrypoint-initdb.d/1-dbbackup.sql` is to initialize the `mysql` database with `./dbbackup.sql`, `./dbbackup.sql` must be the filename of your DB's backup sql script.
+- `movievotingcoremysql` must be your image's name.
+- `./dbbackup.sql:/docker-entrypoint-initdb.d/1-dbbackup.sql` is to initialize the `mysql` database with `./dbbackup.sql`, `./dbbackup.sql` must be the filename of your DB's backup sql script.
 
 3. In `appsettings.json` file of your project, change your default connection string
 ```shell
@@ -288,12 +288,12 @@ networks:
         - subnet: 192.168.0.0/16
 ```
 Note: 
-    - `version:` needs to be `'2'` because thats the version supported on VIC.
-    - In `movievotingcoremysql:` and `db:`, `image:` is changed to the new image name pulled from Docker Hub.
-    - `- ./dbbackup.sql:/docker-entrypoint-initdb.d/1-dbbackup.sql` on `db: volumes:` is removed because its not supported
-    - `volumes: db-data:` is updated with more settings.
-    - `networks` settings are added.
-    - Change `<YourStrong!Passw0rd>`
+- `version:` needs to be `'2'` because thats the version supported on VIC.
+- In `movievotingcoremysql:` and `db:`, `image:` is changed to the new image name pulled from Docker Hub.
+- `- ./dbbackup.sql:/docker-entrypoint-initdb.d/1-dbbackup.sql` on `db: volumes:` is removed because its not supported
+- `volumes: db-data:` is updated with more settings.
+- `networks` settings are added.
+- Change `<YourStrong!Passw0rd>`
 
 5. Create and run your containers with `docker-compose up`
 
@@ -305,9 +305,9 @@ docker-compose up --no-build -d
 docker ps
 ```
 Here, you will need to use
-    - `db`'s `CONTAINER_ID`, we will call it `<DB_CONTAINER_ID>`.  
-    - `movievotingcoremysql_movievotingcoremysql_1` or see `NAMES` column if you defined it will different name, we will call it `<APP_CONTAINER_NAME>`.
-    - `movievotingcoremysql_movievotingcoremysql_1`'s `PORTS` which you can use to access your web app in a browser later, we will call it `<APP_IP_ADDRESS_AND_PORT>`.
+- `db`'s `CONTAINER_ID`, we will call it `<DB_CONTAINER_ID>`.  
+- `movievotingcoremysql_movievotingcoremysql_1` or see `NAMES` column if you defined it will different name, we will call it `<APP_CONTAINER_NAME>`.
+- `movievotingcoremysql_movievotingcoremysql_1`'s `PORTS` which you can use to access your web app in a browser later, we will call it `<APP_IP_ADDRESS_AND_PORT>`.
 
 7. Initialize your MySQL database
 ```shell
