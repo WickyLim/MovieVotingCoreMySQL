@@ -1,10 +1,11 @@
 ﻿# Movie Voting App (on .NET Core framework, and MySQL)
-This project is build with `ASP.NET Core` framwork, conecting to a database in `MySQL on Docker`.
+This project is build with `ASP.NET Core` framework, conecting to a database in `MySQL on Docker`.
 
 To run this project on your local machine, [Setup MySQL Server on Docker and connect to it on local dev environment](#setup-mysql-server-on-docker-and-connect-to-it-on-local-dev-environment).
 
 To deploy this project to Docker, [Setup project to deploy to Docker](#setup-project-to-deploy-to-docker).
 
+To deploy to VIC, follows [Deploy project to vSphere Integrated Containers (VIC)](#deploy-project-to-vsphere-integrated-containers-vic).
 
 ## Setup MySQL Server on Docker and connect to it on local dev environment
 1. Download SQL Server container
@@ -140,7 +141,9 @@ volumes:
   db-data:
 ```
 Here,
+
 a. `movievotingcoremysql` must be your image's name.
+
 b. `./dbbackup.sql:/docker-entrypoint-initdb.d/1-dbbackup.sql` is to initialize the `mysql` database with `./dbbackup.sql`, `./dbbackup.sql` must be the filename of your DB's backup sql script.
 
 3. In `appsettings.json` file of your project, change your default connection string
@@ -152,17 +155,21 @@ ConnectionStrings": {
 4. On command prompt, navigate to project's directory
 5. On command prompt, run 
 ```shell
+docker build -t movievotingcoremysql .
+```
+6. On command prompt, run 
+```shell
 docker-compose up --no-build -d
 ```
-6. Check if your containers are running
+7. Check if your containers are running
 ```shell
 docker ps
 ``` 
-7. Visit http://localhost:8080
+8. Visit http://localhost:8080
 ```shell
 Note: If your application is up, but have connection issue to the database, try `docker restart <container_name>`
 ```
-8. Once you've done, stop and remove the containers with this command
+9. Once you've done, stop and remove the containers with this command
 ```shell
 docker-compose down
 ```
@@ -283,11 +290,17 @@ networks:
         - subnet: 192.168.0.0/16
 ```
 Note: 
+
 a. `version:` needs to be `'2'` because thats the version supported on VIC.
+
 b. In `movievotingcoremysql:` and `db:`, `image:` is changed to the new image name pulled from Docker Hub.
+
 c. `- ./dbbackup.sql:/docker-entrypoint-initdb.d/1-dbbackup.sql` on `db: volumes:` is removed because its not supported
+
 d. `volumes: db-data:` is updated with more settings.
+
 e. `networks` settings are added.
+
 f. Change `<YourStrong!Passw0rd>`
 
 5. Create and run your containers with `docker-compose up`
@@ -299,8 +312,11 @@ docker-compose up --no-build -d
 docker ps
 ```
 Here, you will need to use
+
 a. `db`'s `CONTAINER_ID`, we will call it `<DB_CONTAINER_ID>`.
+
 b. `movievotingcoremysql_movievotingcoremysql_1` or see `NAMES` column if you defined it will different name, we will call it `<APP_CONTAINER_NAME>`.
+
 c. `movievotingcoremysql_movievotingcoremysql_1`'s `PORTS` which you can use to access your web app in a browser later, we will call it `<APP_IP_ADDRESS_AND_PORT>`.
 
 7. Initialize your MySQL database
