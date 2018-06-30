@@ -290,20 +290,16 @@ networks:
         - subnet: 192.168.0.0/16
 ```
 Note: 
-
+```
 a. `version:` needs to be `'2'` because thats the version supported on VIC.
-
 b. In `movievotingcoremysql:` and `db:`, `image:` is changed to the new image name pulled from Docker Hub.
-
 c. `- ./dbbackup.sql:/docker-entrypoint-initdb.d/1-dbbackup.sql` on `db: volumes:` is removed because its not supported
-
 d. `volumes: db-data:` is updated with more settings.
-
 e. `networks` settings are added.
-
 f. Change `<YourStrong!Passw0rd>`
-
+```
 5. Create and run your containers with `docker-compose up`
+
 ```shell
 docker-compose up --no-build -d
 ```
@@ -312,12 +308,9 @@ docker-compose up --no-build -d
 docker ps
 ```
 Here, you will need to use
-
-a. `db`'s `CONTAINER_ID`, we will call it `<DB_CONTAINER_ID>`.
-
-b. `movievotingcoremysql_movievotingcoremysql_1` or see `NAMES` column if you defined it will different name, we will call it `<APP_CONTAINER_NAME>`.
-
-c. `movievotingcoremysql_movievotingcoremysql_1`'s `PORTS` which you can use to access your web app in a browser later, we will call it `<APP_IP_ADDRESS_AND_PORT>`.
+    a. `db`'s `CONTAINER_ID`, we will call it `<DB_CONTAINER_ID>`.  
+    b. `movievotingcoremysql_movievotingcoremysql_1` or see `NAMES` column if you defined it will different name, we will call it `<APP_CONTAINER_NAME>`.
+    c. `movievotingcoremysql_movievotingcoremysql_1`'s `PORTS` which you can use to access your web app in a browser later, we will call it `<APP_IP_ADDRESS_AND_PORT>`.
 
 7. Initialize your MySQL database
 ```shell
