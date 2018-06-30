@@ -1,8 +1,29 @@
-version: '3.4'
+version: '2'
 
 services:
   movievotingcoremysql:
-    image: movievotingcoremysql
+    image: vsgdev/movievotingcoremysql:1.0
     build:
       context: .
       dockerfile: Dockerfile
+    restart: always
+    ports:
+      - "8080:80"
+    depends_on:
+      - db
+  db:
+    image: mysql:latest
+    container_name: db
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: P@ssw0rd123
+      MYSQL_DATABASE: Movie
+    ports:
+      - 3306:3306
+    volumes:
+      - db-data:/var/opt/mysql/data
+      - ./dbbackup.sql:/docker-entrypoint-initdb.d/1-dbbackup.sql
+
+volumes:
+  db-data:
+

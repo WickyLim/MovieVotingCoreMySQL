@@ -39,7 +39,7 @@ CREATE TABLE `Movie` (
 
 LOCK TABLES `Movie` WRITE;
 /*!40000 ALTER TABLE `Movie` DISABLE KEYS */;
-INSERT INTO `Movie` VALUES (1,'Avengers Infinity War','avengers',0),(2,'Deadpool 2','deadpool',0),(3,'Incredibles 2','incredibles',1);
+INSERT INTO `Movie` VALUES (1,'Avengers Infinity War','avengers',0),(2,'Deadpool 2','deadpool',0),(3,'Incredibles 2','incredibles',0);
 /*!40000 ALTER TABLE `Movie` ENABLE KEYS */;
 UNLOCK TABLES;
 

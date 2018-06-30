@@ -1,12 +1,12 @@
 ﻿# Movie Voting App (on .NET Core framework, and MySQL)
 This project is build with `ASP.NET Core` framwork, conecting to a database in `MySQL on Docker`.
 
-To run this project on your local machine, [Setup MySQL on Docker](#setup-mysql-on-docker) and follows the settings mentioned on the [Setup database connection on local dev environment](#setup-database-connection-on-local-dev-environment) section.
+To run this project on your local machine, [Setup MySQL Server on Docker and connect to it on local dev environment](#setup-mysql-server-on-docker-and-connect-to-it-on-local-dev-environment).
 
-To deploy this project to Docker, [Setup MySQL on Docker](#setup-mysql-on-docker) and follow steps on the [Setup project to deploy to Docker](#setup-project-to-deploy-to-docker) section.
+To deploy this project to Docker, [Setup project to deploy to Docker](#setup-project-to-deploy-to-docker).
 
 
-## Setup MySQL on Docker
+## Setup MySQL Server on Docker and connect to it on local dev environment
 1. Download SQL Server container
 ```shell
 docker pull mysql:latest
@@ -46,17 +46,15 @@ exit
     User: root
     Password: <YourStrong!Passw0rd>
 ```
-9. On your Database IDE, create or restore your database. For this project, you can use [DBBackup/DBBackup.sql](DBBackup/DBBackup.sql)
+9. On your Database IDE, create or restore your database. For this project, you can use [dbbackup.sql](dbbackup.sql)
 
-
-## Setup database connection on local dev environment
-1. In `appsettings.json` file of your project, add a default connection string
+10. In `appsettings.json` file of your project, add a default connection string
 ```shell
 ConnectionStrings": {
   "DefaultConnection": "server=localhost;userid=root;password=<YourStrong!Passw0rd>;database=Movie;"
 }
 ```
-2. In `Startup.cs` file of your project, add a SQLServer connection (or change from the original SQLite connection)
+11. In `Startup.cs` file of your project, add a SQLServer connection (or change from the original SQLite connection)
 ```shell
 // This method gets called by the runtime. Use this method to add services to the container.
 public void ConfigureServices(IServiceCollection services)
@@ -71,7 +69,7 @@ public void ConfigureServices(IServiceCollection services)
     .
 }
 ```
-3. In the `.csproj` file of your project, include the following packages
+12. In the `.csproj` file of your project, include the following packages
 ```shell
   <ItemGroup>
     .
@@ -89,8 +87,7 @@ public void ConfigureServices(IServiceCollection services)
 
 
 ## Setup project to deploy to Docker
-1. Right click project on Solution Explorer > Add > Add Docker Support
-2. Change `Dockerfile` to 
+1. Add `Dockerfile` to project's root directory with this content
 ```shell
 FROM microsoft/aspnetcore-build:2.0 AS build-env
 WORKDIR /app
@@ -111,29 +108,66 @@ ENTRYPOINT ["dotnet", "MovieVotingCoreMySQL.dll"]
 ```
 (replace `MovieVotingCoreMySQL` to your own project name)
 
+2. Add `docker-compose.yml` to project's root directory with this content
+```shell
+version: '2'
+
+services:
+  movievotingcoremysql:
+    image: vsgdev/movievotingcoremysql:1.0
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: always
+    ports:
+      - "8080:80"
+    depends_on:
+      - db
+  db:
+    image: mysql:latest
+    container_name: db
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: <YourStrong!Passw0rd>
+      MYSQL_DATABASE: Movie
+    ports:
+      - 3306:3306
+    volumes:
+      - db-data:/var/opt/mysql/data
+      - ./dbbackup.sql:/docker-entrypoint-initdb.d/1-dbbackup.sql
+
+volumes:
+  db-data:
+```
+Here,
+a. `vsgdev/movievotingcoremysql:1.0` must be your image's name.
+b. `./dbbackup.sql` on `volumes` must be the filename of your DB's backup script.
+
 3. In `appsettings.json` file of your project, change your default connection string
 ```shell
 ConnectionStrings": {
-  "DefaultConnection": "server=mysql1;userid=root;password=<YourStrong!Passw0rd>;database=Movie;"
+  "DefaultConnection": "server=db;port=3306;userid=root;password=<YourStrong!Passw0rd>;database=Movie;"
 }
 ```
-Note: `mysql1` needs to be the same as you mysql image name set on Step 2 of [Setup MySQL on Docker](#setup-mysql-on-docker)
-
 4. On command prompt, navigate to project's directory
 5. On command prompt, run 
 ```shell
-docker build -t image-name .
-``` 
-(replace `image-name` to your own preferred name)
-
-6. On command prompt, run 
+docker-compose up --no-build -d
+```
+6. Check if your containers are running
 ```shell
-docker run -d -p 8080:80 --name container-name --link mysql1 -it image-name
+docker ps
 ``` 
-(replace `container-name` and `image-name` to your own preferred name)
-Note: `mysql1` needs to be the same as you mysql image name set on Step 2 of [Setup MySQL on Docker](#setup-mysql-on-docker)
-
 7. Visit http://localhost:8080
+```shell
+Note: If your application is up, but have connection issue to the database, try `docker restart <container_name>`
+```
+8. Once you've done, stop and remove the containers with this command
+```shell
+docker-compose down
+```
+
+## Deploy project to VIC
 
 
 ## References
