@@ -114,7 +114,7 @@ version: '2'
 
 services:
   movievotingcoremysql:
-    image: vsgdev/movievotingcoremysql:1.0
+    image: movievotingcoremysql
     build:
       context: .
       dockerfile: Dockerfile
@@ -140,8 +140,8 @@ volumes:
   db-data:
 ```
 Here,
-a. `vsgdev/movievotingcoremysql:1.0` must be your image's name.
-b. `./dbbackup.sql` on `volumes` must be the filename of your DB's backup script.
+a. `movievotingcoremysql` must be your image's name.
+b. `./dbbackup.sql:/docker-entrypoint-initdb.d/1-dbbackup.sql` is to initialize the `mysql` database with `./dbbackup.sql`, `./dbbackup.sql` must be the filename of your DB's backup sql script.
 
 3. In `appsettings.json` file of your project, change your default connection string
 ```shell
@@ -167,9 +167,158 @@ Note: If your application is up, but have connection issue to the database, try 
 docker-compose down
 ```
 
-## Deploy project to VIC
+## Deploy project to vSphere Integrated Containers (VIC)
+#### Upload app's image to Docker Hub
+Because VIC doesn't support `docker build`, you have to build your images with `Docker` on your local pc, and then upload your images to `Docker Hub` for VIC to perform a `docker pull` on.
 
+1. Create an account on https://hub.docker.com
+2. On command prompt, login to your docker account
+```shell
+docker login
+```
+3. Build navigate to your project's root directory, and build your app image
+```shell
+docker build -t <image-name> .
+```
+for this project's case
+```shell
+docker build -t movievotingcoremysql .
+```
+4. List all docker images to get your `IMAGE ID`
+```shell
+docker images
+```
+5. Tag your image
+```shell
+docker tag <IMAGE ID> yourdockerhubusername/image-name:1.0
+```
+for this project's case
+```shell
+docker tag bb38976d03cf vsgdev/movievotingcoremysql:1.0
+```
+6. Push image to Docker Hub, and your image is ready for everyone to use
+```shell
+docker push vsgdev/movievotingcoremysql
+```
+
+#### Create your own mysql image on Docker Hub
+Because VIC does not support mounting directories as a data volume, you cannot use `/docker-entrypoint-initdb.d` on `docker-compose.yml` to initialize your `mysql` databases.
+
+1. Create a new folder, name it `DBBackup`.
+2. Copy your sql script into the folder.
+3. Create a `Dockerfile` with this content
+```shell
+FROM mysql:latest
+COPY dbbackup.sql /mysql/dbbackup.sql
+```
+4. Build your own `mysql` image
+```shell
+docker build -t mysql-mv .
+```
+5. Get your `IMAGE ID` from running `docker images` and tag you image
+```shell
+docker tag bb38976d03cf vsgdev/mysql-mv:1.0
+```
+6. Push image to `Docker Hub`
+```shell
+docker push vsgdev/mysql-mv
+```
+
+#### Deploy and run on VIC
+1. On command prompt, connect to VIC
+```shell
+export DOCKER_HOST=<docker-ip-address>:<port>
+```
+for example,
+```shell
+export DOCKER_HOST=192.168.1.200:1234
+```
+2. Verify if your `docker info` is now showing info of VIC
+```shell
+docker info
+```
+3. Pull images from your `Docker Hub`, for this project's case
+```shell
+docker pull vsgdev/movievotingcoremysql:1.0
+docker pull vsgdev/mysql-my:1.0
+```
+4. Update for `docker-compose.yml` file
+```shell
+version: '2'
+
+services:
+  movievotingcoremysql:
+    image: vsgdev/movievotingcoremysql:1.0
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: always
+    ports:
+      - "8080:80"
+    depends_on:
+      - db
+  db:
+    image: vsgdev/mysql-mv:1.0
+    container_name: db
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: <YourStrong!Passw0rd>
+      MYSQL_DATABASE: Movie
+    ports:
+      - 3306:3306
+    volumes:
+      - db-data:/var/opt/mysql/data
+
+volumes:
+  db-data:
+    driver: "vsphere"
+    driver_opts:
+      Capacity: "2G"
+      VolumeStore: "default"
+
+networks:
+  default:
+    ipam:
+      config:
+        - subnet: 192.168.0.0/16
+```
+Note: 
+a. `version:` needs to be `'2'` because thats the version supported on VIC.
+b. In `movievotingcoremysql:` and `db:`, `image:` is changed to the new image name pulled from Docker Hub.
+c. `- ./dbbackup.sql:/docker-entrypoint-initdb.d/1-dbbackup.sql` on `db: volumes:` is removed because its not supported
+d. `volumes: db-data:` is updated with more settings.
+e. `networks` settings are added.
+f. Change `<YourStrong!Passw0rd>`
+
+5. Create and run your containers with `docker-compose up`
+```shell
+docker-compose up --no-build -d
+```
+6. List all running containers
+```shell
+docker ps
+```
+Here, you will need to use
+a. `db`'s `CONTAINER_ID`, we will call it `<DB_CONTAINER_ID>`.
+b. `movievotingcoremysql_movievotingcoremysql_1` or see `NAMES` column if you defined it will different name, we will call it `<APP_CONTAINER_NAME>`.
+c. `movievotingcoremysql_movievotingcoremysql_1`'s `PORTS` which you can use to access your web app in a browser later, we will call it `<APP_IP_ADDRESS_AND_PORT>`.
+
+7. Initialize your MySQL database
+```shell
+docker exec <DB_CONTAINER_ID> /bin/sh -c 'mysql -u root -p<YourStrong!Passw0rd> </mysql/dbbackup.sql'
+```
+8. Restart your app
+```shell
+docker restart <APP_CONTAINER_NAME>
+```
+9. On a web browser, visits `<APP_IP_ADDRESS_AND_PORT>`.
+
+10. When finish using, stop and remove your containers with `docker-compose down`.
+```shell
+docker-compose down
+```
 
 ## References
 1. Run MySQL container image on Docker - https://severalnines.com/blog/mysql-docker-containers-understanding-basics
 2. Connecting web app container to MySQL container on Docker - https://medium.com/@Likhitd/asp-net-core-and-mysql-with-docker-part-3-e3827e006e3
+3. Push images to Docker Hub - https://ropenscilabs.github.io/r-docker-tutorial/04-Dockerhub.html

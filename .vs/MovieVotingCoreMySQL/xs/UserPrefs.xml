@@ -1,5 +1,5 @@
 ﻿<Properties StartupConfiguration="{24D8C7FB-6C9D-4FC1-8B9B-43019E098C9F}|Default">
-  <MonoDevelop.Ide.Workbench ActiveDocument="dbbackup.sql">
+  <MonoDevelop.Ide.Workbench ActiveDocument="DBBackup/Dockerfile">
     <Files>
       <File FileName="MovieVotingCoreMySQL.csproj" Line="1" Column="1" />
       <File FileName="appsettings.json" Line="9" Column="36" />
@@ -11,11 +11,13 @@
       <File FileName="Pages/Index.cshtml.cs" Line="10" Column="28" />
       <File FileName="Pages/About.cshtml.cs" Line="10" Column="28" />
       <File FileName="Models/SeedData.cs" Line="24" Column="38" />
-      <File FileName="Dockerfile" Line="16" Column="50" />
-      <File FileName="docker-compose.yml" Line="15" Column="23" />
-      <File FileName="README.md" Line="134" Column="125" />
-      <File FileName=".dockerignore" Line="1" Column="1" />
-      <File FileName="dbbackup.sql" Line="1" Column="1" />
+      <File FileName="Dockerfile" Line="16" Column="29" />
+      <File FileName="docker-compose.yml" Line="26" Column="1" />
+      <File FileName="README.md" Line="171" Column="1" />
+      <File FileName="dbbackup.sql" Line="38" Column="3" />
+      <File FileName="DBBackup/Dockerfile" Line="3" Column="38" />
+      <File FileName="DBBackup/setup.sh" Line="3" Column="28" />
+      <File FileName="DBBackup/dbbackup.sql" Line="1" Column="1" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
