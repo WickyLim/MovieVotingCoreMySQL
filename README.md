@@ -305,9 +305,10 @@ docker-compose up --no-build -d
 docker ps
 ```
 Here, you will need to use
-- `db`'s `CONTAINER_ID`, we will call it `<DB_CONTAINER_ID>`.  
-- `movievotingcoremysql_movievotingcoremysql_1` or see `NAMES` column if you defined it will different name, we will call it `<APP_CONTAINER_NAME>`.
-- `movievotingcoremysql_movievotingcoremysql_1`'s `PORTS` which you can use to access your web app in a browser later, we will call it `<APP_IP_ADDRESS_AND_PORT>`.
+- `db`'s `CONTAINER_ID`, we will call it `<DB_CONTAINER_ID>` on Step 7.  
+- `movievotingcoremysql_movievotingcoremysql_1` or see `NAMES` column if you defined it will different name, we will call it `<APP_CONTAINER_NAME>` on Step 8.
+- `movievotingcoremysql_movievotingcoremysql_1`'s `PORTS` which you can use to access your web app in a browser later, we will call it `<APP_IP_ADDRESS_AND_PORT>` on Step 9.
+- `db`'s `PORTS` to connect to the database on a database IDE, we will call them `<DB_IP_ADDRESS>` and `<DB_PORT>` on step 10c.
 
 7. Initialize your MySQL database
 ```shell
@@ -319,7 +320,30 @@ docker restart <APP_CONTAINER_NAME>
 ```
 9. On a web browser, visits `<APP_IP_ADDRESS_AND_PORT>`.
 
-10. When finish using, stop and remove your containers with `docker-compose down`.
+10a. To access the database on a database IDE, login to the MySQL server and enter your password when prompted
+```shell
+docker exec -it db mysql -u root -p
+```
+10b. Change authorization plugins for root users
+```shell
+ALTER USER 'root'@'%' IDENTIFIED WITH mysql_native_password BY '<YourStrong!Passw0rd>';
+```
+, and then
+```shell
+ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY '<YourStrong!Passw0rd>';
+```
+, and exit
+```shell
+exit
+```
+10c. Access your MySQL server from Database IDE with this configuration:
+```shell
+    Host: <DB_IP_ADDRESS>
+    Port: <DB_PORT>
+    User: root
+    Password: <YourStrong!Passw0rd>
+```
+11. When finish using, stop and remove your containers with `docker-compose down`.
 ```shell
 docker-compose down
 ```
